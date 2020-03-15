@@ -1,14 +1,21 @@
 name: 'FrequentTask'
 
 on:
-schedule:
-  - cron: '*/5 * * * *'
+  schedule:
+    - cron: '*/5 * * * *'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Add Python 3.x
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.7'
+
       - name: Run my job
         env:
           ACTION_DEPLOY_KEY: ${{ secrets.ACTION_DEPLOY_KEY }}
@@ -18,12 +25,14 @@ jobs:
           USER: ${{ secrets.USER }}
           EMAIL: ${{ secrets.EMAIL }}
           JOB_REPO: ${{ secrets.JOB_REPO }}
+          TZ: Asia/Shanghai
         run: |
           # set ssh
           mkdir -p ~/.ssh/
           echo "$ACTION_DEPLOY_KEY" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan "$GIT_HOST_1" >> ~/.ssh/known_hosts
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          
           ssh-keyscan "$GIT_HOST_2" >> ~/.ssh/known_hosts
           ssh-keyscan "$GIT_HOST_3" >> ~/.ssh/known_hosts
 
@@ -31,5 +40,5 @@ jobs:
           git config --global user.name "$USER"
           git config --global user.email "$EMAIL"
 
-          git clone “$JOB_REPO“
+          git clone $JOB_REPO
           bash -e jobs/frequent-task.sh
