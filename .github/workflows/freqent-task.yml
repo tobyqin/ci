@@ -10,6 +10,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup environment
+      env:
+        GIT_HOST_1: ${{ secrets.GIT_HOST_1 }}
+        GIT_HOST_2: ${{ secrets.GIT_HOST_2 }}
+        GIT_HOST_3: ${{ secrets.GIT_HOST_3 }}
+        USER: ${{ secrets.USER }}
+        EMAIL: ${{ secrets.EMAIL }}
       run: |
         # set ssh
         mkdir -p ~/.ssh/
@@ -26,6 +32,8 @@ jobs:
         printenv | sort
 
     - name: Get my jobs
+      env:
+        JOB_REPO“: ${{ secrets.JOB_REPO“ }}
       run: git clone “$JOB_REPO“
     
     - name: Run my jobs
