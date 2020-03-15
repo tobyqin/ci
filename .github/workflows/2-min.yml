@@ -25,6 +25,8 @@ jobs:
         git config --global user.name "$USER"
         git config --global user.email "$EMAIL"
 
+        printenv | sort
+
     - name: Get my jobs
       run: git clone “$JOB_REPO“
     
