@@ -9,13 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup environment
+      - name: Run my job
         env:
+          ACTION_DEPLOY_KEY: ${{ secrets.ACTION_DEPLOY_KEY }}
           GIT_HOST_1: ${{ secrets.GIT_HOST_1 }}
           GIT_HOST_2: ${{ secrets.GIT_HOST_2 }}
           GIT_HOST_3: ${{ secrets.GIT_HOST_3 }}
           USER: ${{ secrets.USER }}
           EMAIL: ${{ secrets.EMAIL }}
+          JOB_REPO: ${{ secrets.JOB_REPO }}
         run: |
           # set ssh
           mkdir -p ~/.ssh/
@@ -29,13 +31,5 @@ jobs:
           git config --global user.name "$USER"
           git config --global user.email "$EMAIL"
 
-          printenv | sort
-
-      - name: Get my jobs
-        env:
-          JOB_REPO: ${{ secrets.JOB_REPO }}
-        run: git clone “$JOB_REPO“
-
-      - name: Run my jobs
-        run: |
+          git clone “$JOB_REPO“
           bash -e jobs/frequent-task.sh
