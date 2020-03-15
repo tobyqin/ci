@@ -1,8 +1,8 @@
-name: Every Other
+name: "Frequent Task"
 
 on: 
   schedule:
-    - cron: "*/3 * * * *"
+    - cron: "*/5 * * * *"
 
 jobs:
   build:
@@ -32,4 +32,4 @@ jobs:
     
     - name: Run my jobs
       run: |
-        bash -e jobs/every-2-min.sh
+        bash -e jobs/frequent-task.sh
