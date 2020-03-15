@@ -33,7 +33,7 @@ jobs:
 
     - name: Get my jobs
       env:
-        JOB_REPO“: ${{ secrets.JOB_REPO“ }}
+        JOB_REPO: ${{ secrets.JOB_REPO“ }}
       run: git clone “$JOB_REPO“
     
     - name: Run my jobs
