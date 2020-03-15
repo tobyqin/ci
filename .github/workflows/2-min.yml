@@ -1,0 +1,33 @@
+name: CI
+
+on: 
+  schedule:
+    - cron: "*/2 * * * *"
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup environment
+      run: |
+        # set ssh
+        mkdir -p ~/.ssh/
+        echo "$ACTION_DEPLOY_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan $GIT_HOST_1 >> ~/.ssh/known_hosts
+        ssh-keyscan $GIT_HOST_2 >> ~/.ssh/known_hosts
+        ssh-keyscan $GIT_HOST_3 >> ~/.ssh/known_hosts
+        
+        # set git information
+        git config --global user.name 'Toby@Github'
+        git config --global user.email 'toby.qin@live.com'
+
+    - name: Get my jobs
+      run: git clone $JOB_REPO
+    
+    - name: Run my jobs
+      run: |
+        bash -e jobs/every-2-min.sh
