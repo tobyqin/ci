@@ -39,4 +39,4 @@ jobs:
           git config --global user.email "$EMAIL"
 
           git clone $JOB_REPO
-          bash -e jobs/frequent-task.sh
+          ls -la
