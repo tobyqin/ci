@@ -1,4 +1,4 @@
-name: CI
+name: Every Other
 
 on: 
   schedule:
@@ -26,7 +26,7 @@ jobs:
         git config --global user.email "$EMAIL"
 
     - name: Get my jobs
-      run: git clone $JOB_REPO
+      run: git clone “$JOB_REPO“
     
     - name: Run my jobs
       run: |
