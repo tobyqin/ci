@@ -1,41 +1,41 @@
-name: "Frequent Task"
+name: 'Frequent Task'
 
-on: 
+on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: '*/5 * * * *'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup environment
-      env:
-        GIT_HOST_1: ${{ secrets.GIT_HOST_1 }}
-        GIT_HOST_2: ${{ secrets.GIT_HOST_2 }}
-        GIT_HOST_3: ${{ secrets.GIT_HOST_3 }}
-        USER: ${{ secrets.USER }}
-        EMAIL: ${{ secrets.EMAIL }}
-      run: |
-        # set ssh
-        mkdir -p ~/.ssh/
-        echo "$ACTION_DEPLOY_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan "$GIT_HOST_1" >> ~/.ssh/known_hosts
-        ssh-keyscan "$GIT_HOST_2" >> ~/.ssh/known_hosts
-        ssh-keyscan "$GIT_HOST_3" >> ~/.ssh/known_hosts
-        
-        # set git information
-        git config --global user.name "$USER"
-        git config --global user.email "$EMAIL"
+      - uses: actions/checkout@v2
+      - name: Setup environment
+        env:
+          GIT_HOST_1: ${{ secrets.GIT_HOST_1 }}
+          GIT_HOST_2: ${{ secrets.GIT_HOST_2 }}
+          GIT_HOST_3: ${{ secrets.GIT_HOST_3 }}
+          USER: ${{ secrets.USER }}
+          EMAIL: ${{ secrets.EMAIL }}
+        run: |
+          # set ssh
+          mkdir -p ~/.ssh/
+          echo "$ACTION_DEPLOY_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan "$GIT_HOST_1" >> ~/.ssh/known_hosts
+          ssh-keyscan "$GIT_HOST_2" >> ~/.ssh/known_hosts
+          ssh-keyscan "$GIT_HOST_3" >> ~/.ssh/known_hosts
 
-        printenv | sort
+          # set git information
+          git config --global user.name "$USER"
+          git config --global user.email "$EMAIL"
 
-    - name: Get my jobs
-      env:
-        JOB_REPO: ${{ secrets.JOB_REPO“ }}
-      run: git clone “$JOB_REPO“
-    
-    - name: Run my jobs
-      run: |
-        bash -e jobs/frequent-task.sh
+          printenv | sort
+
+      - name: Get my jobs
+        env:
+          JOB_REPO: ${{ secrets.JOB_REPO“ }}
+        run: git clone “$JOB_REPO“
+
+      - name: Run my jobs
+        run: |
+          bash -e jobs/frequent-task.sh
